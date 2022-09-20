@@ -16,6 +16,7 @@ sphinx~=5.1
 
 # Data Science
 pandas
+scikit-learn
 
 # Visualization
 plotly
