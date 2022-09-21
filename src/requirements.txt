@@ -1,18 +1,22 @@
-black~=22.0
-flake8>=3.7.9, <5.0
-ipython>=7.31.1, <8.0
-isort~=5.0
-jupyter~=1.0
-jupyterlab~=3.0
-kedro~=0.18.2
-kedro-telemetry~=0.2.0
+black
+flake8
+ipython
+isort
+jupyter
+jupyterlab
+kedro
+kedro-telemetry
 mkgendocs
-nbstripout~=0.4
-openpyxl~=3.0.10
-pytest-cov~=3.0
-pytest-mock==3.8.2
-pytest==7.1.3
-sphinx~=5.1
+nbstripout
+openpyxl
+pytest-cov
+pytest-mock
+pytest
+sphinx
+
+#fix librairies
+pathlib
+ruamel-yaml
 
 # Data Science
 pandas
