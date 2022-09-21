@@ -25,6 +25,10 @@ preprocessed_shuttles:
   type: pandas.ParquetDataSet
   filepath: data/02_intermediate/preprocessed_shuttles.pq
 
+shuttle_passenger_capacity_plot:
+  type: plotly.JSONDataSet
+  filepath: data/08_reporting/shuttle_passenger_capacity_plot.json
+
 model_input_table:
   type: pandas.ParquetDataSet
   filepath: data/03_primary/model_input_table.pq
