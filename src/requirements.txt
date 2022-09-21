@@ -19,3 +19,4 @@ pandas
 
 # Visualization
 plotly
+kedro-viz
