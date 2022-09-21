@@ -2,6 +2,7 @@
 This is a boilerplate pipeline 'data_processing'
 generated using Kedro 0.18.2
 """
+import plotly.express as px
 import pandas as pd
 
 
@@ -67,3 +68,12 @@ def create_model_input_table(shuttles: pd.DataFrame, companies: pd.DataFrame, re
     )
     model_input_table = model_input_table.dropna()
     return model_input_table
+
+
+def compare_passenger_capacity(preprocessed_shuttles: pd.DataFrame):
+    fig = px.bar(
+        data_frame=preprocessed_shuttles.groupby(["shuttle_type"]).mean().reset_index(),
+        x="shuttle_type",
+        y="passenger_capacity",
+    )
+    return fig

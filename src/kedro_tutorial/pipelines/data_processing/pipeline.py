@@ -7,6 +7,7 @@ from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes import preprocess_companies, \
     preprocess_shuttles, \
+    compare_passenger_capacity, \
     create_model_input_table
 
 
@@ -26,6 +27,11 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="preprocess_shuttles_node",
             ),
             node(
+                func=compare_passenger_capacity,
+                inputs="preprocessed_shuttles",
+                outputs="shuttle_passenger_capacity_plot",
+            ),
+            node(
                 func=create_model_input_table,
                 inputs=["preprocessed_shuttles", "preprocessed_companies", "reviews"],
                 outputs="model_input_table",
@@ -33,3 +39,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         ]
     )
+
+
+# compare_passenger_capacity
