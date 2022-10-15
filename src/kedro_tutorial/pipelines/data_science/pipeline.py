@@ -8,7 +8,7 @@ from .nodes import split_data, train_model, evaluate_model
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    return pipeline(
+    pipeline_instance = pipeline(
         [
             node(
                 func=split_data,
@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=evaluate_model,
                 inputs=["regressor", "X_test", "y_test"],
-                outputs=None,
+                outputs="metrics",
                 name="evaluate_model_node",
             ),
         ]
