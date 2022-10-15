@@ -5,10 +5,12 @@ generated using Kedro 0.18.2
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import preprocess_companies, \
-    preprocess_shuttles, \
-    compare_passenger_capacity, \
+from .nodes import (
+    preprocess_companies,
+    preprocess_shuttles,
+    compare_passenger_capacity,
     create_model_input_table
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -37,7 +39,10 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="model_input_table",
                 name="create_model_input_table_node",
             ),
-        ]
+        ],
+        namespace="data_processing",
+        inputs=["companies", "shuttles", "reviews"],
+        outputs="model_input_table",
     )
 
 
