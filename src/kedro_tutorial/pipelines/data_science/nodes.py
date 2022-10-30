@@ -59,14 +59,22 @@ def test_predict(X_test: pd.DataFrame, model: LinearRegression) -> pd.DataFrame:
 
 
 def evaluate_model(
-    regressor: LinearRegression, X_test: pd.DataFrame, y_test: pd.DataFrame) -> [Dict[str, float], Dict[str, float]]:
+    regressor: LinearRegression, X_test: pd.DataFrame, y_test: pd.DataFrame) -> Dict:
     """Calculates and logs the coefficient of determination.
 
     Args:
         regressor: Trained model.
         X_test: Testing data of independent features.
         y_test: Testing data for price.
+
+    Returns:
+        dict of metrics, as following : {"r2_score": {"value": score, "step": 1},
+               "mae": {"value": mae, "step": 1},
+               "max_error": {"value": me, "step": 1}
+               }
+
     """
+
     y_pred = regressor.predict(X_test)
     score = r2_score(y_test, y_pred)
     mae = mean_absolute_error(y_test, y_pred)
@@ -74,8 +82,9 @@ def evaluate_model(
     logger = logging.getLogger(__name__)
     logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
 
-    metrics = {"r2_score": {"value": score, "step": 1},
-               "mae": {"value": mae, "step": 1},
-               "max_error": {"value": me, "step": 1}
-               }
-    return metrics, metrics
+    metrics = {
+        "r2_score": {"value": score, "step": 1},
+        "mae": {"value": mae, "step": 1},
+        "max_error": {"value": me, "step": 1}
+    }
+    return metrics
