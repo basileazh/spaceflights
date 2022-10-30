@@ -161,3 +161,5 @@ venv.bak/
 .mypy_cache/
 
 /src/requirements.lock
+/mlruns/
+/docs/source/
