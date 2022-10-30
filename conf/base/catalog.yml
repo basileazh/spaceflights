@@ -66,84 +66,48 @@ model_input_table:
 ##### ----- 05 MODEL INPUT -----#####
 
 # X_train
-data_science.active_modelling_pipeline.X_train:
+data_science.X_train:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.ParquetDataSet
-    filepath: data/05_model_input/active_X_train.pq
-  layer: model_input
-
-data_science.candidate_modelling_pipeline.X_train:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.ParquetDataSet
-    filepath: data/05_model_input/candidate_X_train.pq
+    filepath: data/05_model_input/X_train.pq
   layer: model_input
 
 # X_test
-data_science.active_modelling_pipeline.X_test:
+data_science.X_test:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.ParquetDataSet
-    filepath: data/05_model_input/active_X_test.pq
-  layer: model_input
-
-data_science.candidate_modelling_pipeline.X_test:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.ParquetDataSet
-    filepath: data/05_model_input/candidate_X_test.pq
+    filepath: data/05_model_input/X_test.pq
   layer: model_input
 
 # y_train
-data_science.active_modelling_pipeline.y_train:
+data_science.y_train:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.ParquetDataSet
-    filepath: data/05_model_input/active_y_train.pq
-  layer: model_input
-
-data_science.candidate_modelling_pipeline.y_train:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.ParquetDataSet
-    filepath: data/05_model_input/candidate_y_train.pq
+    filepath: data/05_model_input/y_train.pq
   layer: model_input
 
 # y_test
-data_science.active_modelling_pipeline.y_test:
+data_science.y_test:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.ParquetDataSet
-    filepath: data/05_model_input/active_y_test.pq
+    filepath: data/05_model_input/y_test.pq
   layer: model_input
-
-data_science.candidate_modelling_pipeline.y_test:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.ParquetDataSet
-    filepath: data/05_model_input/candidate_y_test.pq
-  layer: model_input
-
 
 ##### ----- 06 MODELS -----#####
 
 # Regressors
-data_science.active_modelling_pipeline.regressor_artifact:
+data_science.regressor_artifact:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/06_models/regressor_active.pickle
+    filepath: data/06_models/regressor.pickle
   layer: models
 
-data_science.candidate_modelling_pipeline.regressor_artifact:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/06_models/regressor_candidate.pickle
-  layer: models
-
-data_science.active_modelling_pipeline.regressor_model:
+data_science.regressor_model:
   type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
   flavor: mlflow.sklearn
   save_args:
@@ -153,47 +117,29 @@ data_science.active_modelling_pipeline.regressor_model:
               - "kedro==0.18.3"
   layer: models
 
-data_science.candidate_modelling_pipeline.regressor_model:
+data_science.pipeline_inference_model:
   type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
-  flavor: mlflow.sklearn
-  save_args:
-      conda_env:
-          python: "3.9"
-          dependencies:
-              - "kedro==0.18.3"
-  layer: models
+  flavor: mlflow.pyfunc
+  pyfunc_workflow: python_model
+  artifact_path: spaceflights  # the name of your mlflow folder = the model_name in pipeline_ml_factory
+  run_id: cc90b8f4f6574fe8824f61c18e9c1b9a
 
 # Metrics
-data_science.active_modelling_pipeline.metrics:
+data_science.metrics:
   type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
   layer: models
 
-data_science.candidate_modelling_pipeline.metrics:
-  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
-  layer: models
+#data_science.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics.json
+#  layer: models
 
-#data_science.active_modelling_pipeline.metrics_json:
-#  type: tracking.MetricsDataSet
-#  filepath: data/09_tracking/metrics_active.json
-#  layer: models
-#
-#data_science.candidate_modelling_pipeline.metrics_json:
-#  type: tracking.MetricsDataSet
-#  filepath: data/09_tracking/metrics_candidate.json
-#  layer: models
 
 ##### ----- 06 MODEL OUTPUTS ----- #####
 
-data_science.active_modelling_pipeline.test_prediction:
+data_science.test_prediction:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.ParquetDataSet
-    filepath: data/07_model_output/active_test_prediction.pq
-  layer: models
-
-data_science.candidate_modelling_pipeline.test_prediction:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.ParquetDataSet
-    filepath: data/07_model_output/candidate_test_prediction.pq
+    filepath: data/07_model_output/prediction.pq
   layer: models
