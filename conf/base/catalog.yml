@@ -29,13 +29,13 @@ data_processing.companies_columns:
 ##### ----- 02 INTERMEDIATE ----- #####
 
 data_processing.preprocessed_companies:
-  type: pandas.CSVDataSet
-  filepath: data/02_intermediate/preprocessed_companies.csv
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocessed_companies.pq
   layer: intermediate
 
 data_processing.preprocessed_shuttles:
-  type: pandas.CSVDataSet
-  filepath: data/02_intermediate/preprocessed_shuttles.csv
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocessed_shuttles.pq
   layer: intermediate
 
 data_processing.shuttle_passenger_capacity_plot:
@@ -46,7 +46,7 @@ data_processing.shuttle_passenger_capacity_plot:
     fig:
       x: shuttle_type
       y: passenger_capacity
-      orientation: h
+      orientation: v
     layout:
       xaxis_title: Shuttles
       yaxis_title: Average passenger capacity
@@ -57,8 +57,8 @@ data_processing.shuttle_passenger_capacity_plot:
 
 
 model_input_table:
-  type: pandas.CSVDataSet
-  filepath: data/03_primary/model_input_table.csv
+  type: pandas.ParquetDataSet
+  filepath: data/03_primary/model_input_table.pq
   layer: primary
 
 
