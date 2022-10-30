@@ -3,8 +3,6 @@ This is a boilerplate pipeline 'data_processing'
 generated using Kedro 0.18.2
 """
 from typing import Tuple, Dict
-
-import plotly.express as px
 import pandas as pd
 
 
@@ -73,9 +71,6 @@ def create_model_input_table(shuttles: pd.DataFrame, companies: pd.DataFrame, re
 
 
 def compare_passenger_capacity(preprocessed_shuttles: pd.DataFrame):
-    fig = px.bar(
-        data_frame=preprocessed_shuttles.groupby(["shuttle_type"]).mean().reset_index(),
-        x="shuttle_type",
-        y="passenger_capacity",
-    )
-    return fig
+
+    gb = preprocessed_shuttles.groupby(["shuttle_type"]).mean().reset_index()
+    return gb

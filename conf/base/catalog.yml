@@ -38,9 +38,19 @@ data_science.preprocessed_shuttles:
   filepath: data/02_intermediate/preprocessed_shuttles.csv
   layer: intermediate
 
-shuttle_passenger_capacity_plot:
-  type: plotly.JSONDataSet
+data_processing.shuttle_passenger_capacity_plot:
+  type: plotly.PlotlyDataSet
   filepath: data/08_reporting/shuttle_passenger_capacity_plot.json
+  plotly_args:
+    type: bar
+    fig:
+      x: shuttle_type
+      y: passenger_capacity
+      orientation: h
+    layout:
+      xaxis_title: Shuttles
+      yaxis_title: Average passenger capacity
+      title: Shuttle Passenger capacity
 
 
 ##### -----  03 PRIMARY ----- #####
@@ -50,6 +60,70 @@ model_input_table:
   type: pandas.CSVDataSet
   filepath: data/03_primary/model_input_table.csv
   layer: primary
+
+
+
+##### ----- 05 MODEL INPUT -----#####
+
+# X_train
+data_science.active_modelling_pipeline.X_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/active_X_train.pq
+  layer: model_input
+
+data_science.candidate_modelling_pipeline.X_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/candidate_X_train.pq
+  layer: model_input
+
+# X_test
+data_science.active_modelling_pipeline.X_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/active_X_test.pq
+  layer: model_input
+
+data_science.candidate_modelling_pipeline.X_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/candidate_X_test.pq
+  layer: model_input
+
+# y_train
+data_science.active_modelling_pipeline.y_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/active_y_train.pq
+  layer: model_input
+
+data_science.candidate_modelling_pipeline.y_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/candidate_y_train.pq
+  layer: model_input
+
+# y_test
+data_science.active_modelling_pipeline.y_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/active_y_test.pq
+  layer: model_input
+
+data_science.candidate_modelling_pipeline.y_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/candidate_y_test.pq
+  layer: model_input
 
 
 ##### ----- 06 MODELS -----#####
