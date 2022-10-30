@@ -29,7 +29,7 @@ def split_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     return X_train, X_test, y_train, y_test
 
 
-def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> LinearRegression:
+def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> [LinearRegression, LinearRegression]:
     """Trains the linear regression model.
 
     Args:
@@ -41,7 +41,21 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> LinearRegression:
     """
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
-    return regressor
+    return regressor, regressor
+
+
+def test_predict(X_test: pd.DataFrame, model: LinearRegression) -> pd.DataFrame:
+    """Outputs predictions
+
+    Args:
+        X_test: Dataset for prediction
+        model: any regressor
+
+    Returns:
+        Prediction on X_test using model with parameters
+
+    """
+    return pd.DataFrame(model.predict(X_test), columns=["test_prediction"])
 
 
 def evaluate_model(
