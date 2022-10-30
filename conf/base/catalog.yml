@@ -28,12 +28,12 @@ data_processing.companies_columns:
 
 ##### ----- 02 INTERMEDIATE ----- #####
 
-data_science.preprocessed_companies:
+data_processing.preprocessed_companies:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/preprocessed_companies.csv
   layer: intermediate
 
-data_science.preprocessed_shuttles:
+data_processing.preprocessed_shuttles:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/preprocessed_shuttles.csv
   layer: intermediate
