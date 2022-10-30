@@ -13,48 +13,51 @@ from .nodes import (
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    pipeline_instance = pipeline(
+    pipeline_training = pipeline(
         [
             node(
                 func=split_data,
                 inputs=["model_input_table", "params:model_options"],
                 outputs=["X_train", "X_test", "y_train", "y_test"],
                 name="split_data_node",
+                tags=["training"]
             ),
             node(
                 func=train_model,
                 inputs=["X_train", "y_train"],
                 outputs=["regressor_artifact", "regressor_model"],
                 name="train_model_node",
+                tags=["training"]
             ),
+        ],
+    )
+
+    pipeline_evaluate = pipeline(
+        [
+            node(
+                func=evaluate_model,
+                inputs=["regressor_artifact", "X_test", "y_test"],
+                outputs="metrics",
+                name="evaluate_model_node",
+                tags=["evaluation", "training"]
+            ),
+        ]
+    )
+
+    pipeline_inference = pipeline(
+        [
             node(
                 func=test_predict,
                 inputs=["X_test", "regressor_artifact"],
                 outputs="test_prediction",
                 name="test_predict_node",
-            ),
-            node(
-                func=evaluate_model,
-                inputs=["regressor_artifact", "X_test", "y_test"],
-                outputs=["metrics_json", "metrics"],
-                name="evaluate_model_node",
+                tags=["inference"]
             ),
         ]
     )
 
-    ds_pipeline_1 = pipeline(
-        pipe=pipeline_instance,
-        inputs="model_input_table",
-        namespace="active_modelling_pipeline",
-    )
-    ds_pipeline_2 = pipeline(
-        pipe=pipeline_instance,
-        inputs="model_input_table",
-        namespace="candidate_modelling_pipeline",
-    )
-
     return pipeline(
-        pipe=ds_pipeline_1 + ds_pipeline_2,
+        pipe=(pipeline_training + pipeline_evaluate + pipeline_inference),
         inputs="model_input_table",
         namespace="data_science",
     )
