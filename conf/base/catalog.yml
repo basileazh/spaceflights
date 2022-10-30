@@ -52,7 +52,7 @@ model_input_table:
   layer: primary
 
 
-##### ----- 05 MODELS -----#####
+##### ----- 06 MODELS -----#####
 
 # Regressors
 data_science.active_modelling_pipeline.regressor_artifact:
@@ -89,7 +89,27 @@ data_science.candidate_modelling_pipeline.regressor_model:
               - "kedro==0.18.3"
   layer: models
 
-# test_prediction
+# Metrics
+data_science.active_modelling_pipeline.metrics:
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+  layer: models
+
+data_science.candidate_modelling_pipeline.metrics:
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+  layer: models
+
+#data_science.active_modelling_pipeline.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics_active.json
+#  layer: models
+#
+#data_science.candidate_modelling_pipeline.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics_candidate.json
+#  layer: models
+
+##### ----- 06 MODEL OUTPUTS ----- #####
+
 data_science.active_modelling_pipeline.test_prediction:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -103,24 +123,3 @@ data_science.candidate_modelling_pipeline.test_prediction:
     type: pandas.ParquetDataSet
     filepath: data/07_model_output/candidate_test_prediction.pq
   layer: models
-
-# Metrics
-#data_science.active_modelling_pipeline.metrics_json:
-#  type: tracking.MetricsDataSet
-#  filepath: data/09_tracking/metrics_active.json
-#  layer: models
-#
-#data_science.candidate_modelling_pipeline.metrics_json:
-#  type: tracking.MetricsDataSet
-#  filepath: data/09_tracking/metrics_candidate.json
-#  layer: models
-
-#
-data_science.active_modelling_pipeline.metrics:
-  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
-  layer: models
-
-data_science.candidate_modelling_pipeline.metrics:
-  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
-  layer: models
-
