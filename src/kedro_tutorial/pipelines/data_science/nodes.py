@@ -60,7 +60,7 @@ def test_predict(X_test: pd.DataFrame, model: LinearRegression) -> pd.DataFrame:
 
 def evaluate_model(
     regressor: LinearRegression, X_test: pd.DataFrame, y_test: pd.Series
-) -> Dict[str, float]:
+) -> [Dict[str, float], Dict[str, float]]:
     """Calculates and logs the coefficient of determination.
 
     Args:
@@ -74,4 +74,9 @@ def evaluate_model(
     me = max_error(y_test, y_pred)
     logger = logging.getLogger(__name__)
     logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
-    return {"r2_score": score, "mae": mae, "max_error": me}
+
+    metrics = {"r2_score": {"value": score, "step": 1},
+               "mae": {"value": mae, "step": 1},
+               "max_error": {"value": me, "step": 1}
+               }
+    return metrics, metrics

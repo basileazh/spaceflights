@@ -24,19 +24,19 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=train_model,
                 inputs=["X_train", "y_train"],
-                outputs="regressor",
+                outputs=["regressor_artifact", "regressor_model"],
                 name="train_model_node",
             ),
             node(
                 func=test_predict,
-                inputs=["X_test", "regressor"],
+                inputs=["X_test", "regressor_artifact"],
                 outputs="test_prediction",
                 name="test_predict_node",
             ),
             node(
                 func=evaluate_model,
-                inputs=["regressor", "X_test", "y_test"],
-                outputs="metrics",
+                inputs=["regressor_artifact", "X_test", "y_test"],
+                outputs=["metrics_json", "metrics"],
                 name="evaluate_model_node",
             ),
         ]
