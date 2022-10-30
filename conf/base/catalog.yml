@@ -38,26 +38,45 @@ model_input_table:
   layer: primary
 
 data_science.active_modelling_pipeline.regressor:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/regressor_active.pickle
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/regressor_active.pickle
   layer: models
 
 data_science.candidate_modelling_pipeline.regressor:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/regressor_candidate.pickle
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/regressor_candidate.pickle
+  layer: models
+
+data_science.active_modelling_pipeline.test_prediction:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/07_model_output/active_test_prediction.pq
+  layer: models
+
+data_science.candidate_modelling_pipeline.test_prediction:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/07_model_output/candidate_test_prediction.pq
   layer: models
 
 data_science.active_modelling_pipeline.metrics:
   type: tracking.MetricsDataSet
   filepath: data/09_tracking/metrics_active.json
+  layer: models
 
 data_science.candidate_modelling_pipeline.metrics:
   type: tracking.MetricsDataSet
   filepath: data/09_tracking/metrics_candidate.json
+  layer: models
 
 data_processing.companies_columns:
   type: tracking.JSONDataSet
   filepath: data/09_tracking/companies_columns.json
+  layer: raw
 
