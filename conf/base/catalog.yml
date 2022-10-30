@@ -3,6 +3,8 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
+##### ----- RAW ----- #####
+
 companies:
   type: pandas.CSVDataSet
   filepath: data/01_raw/companies.csv
@@ -18,6 +20,14 @@ shuttles:
   filepath: data/01_raw/shuttles.xlsx
   layer: raw
 
+data_processing.companies_columns:
+  type: tracking.JSONDataSet
+  filepath: data/09_tracking/companies_columns.json
+  layer: raw
+
+
+##### ----- 02 INTERMEDIATE ----- #####
+
 data_science.preprocessed_companies:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/preprocessed_companies.csv
@@ -32,25 +42,54 @@ shuttle_passenger_capacity_plot:
   type: plotly.JSONDataSet
   filepath: data/08_reporting/shuttle_passenger_capacity_plot.json
 
+
+##### -----  03 PRIMARY ----- #####
+
+
 model_input_table:
   type: pandas.CSVDataSet
   filepath: data/03_primary/model_input_table.csv
   layer: primary
 
-data_science.active_modelling_pipeline.regressor:
+
+##### ----- 05 MODELS -----#####
+
+# Regressors
+data_science.active_modelling_pipeline.regressor_artifact:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
     filepath: data/06_models/regressor_active.pickle
   layer: models
 
-data_science.candidate_modelling_pipeline.regressor:
+data_science.candidate_modelling_pipeline.regressor_artifact:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
     filepath: data/06_models/regressor_candidate.pickle
   layer: models
 
+data_science.active_modelling_pipeline.regressor_model:
+  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+  flavor: mlflow.sklearn
+  save_args:
+      conda_env:
+          python: "3.9"
+          dependencies:
+              - "kedro==0.18.3"
+  layer: models
+
+data_science.candidate_modelling_pipeline.regressor_model:
+  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+  flavor: mlflow.sklearn
+  save_args:
+      conda_env:
+          python: "3.9"
+          dependencies:
+              - "kedro==0.18.3"
+  layer: models
+
+# test_prediction
 data_science.active_modelling_pipeline.test_prediction:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -65,18 +104,23 @@ data_science.candidate_modelling_pipeline.test_prediction:
     filepath: data/07_model_output/candidate_test_prediction.pq
   layer: models
 
+# Metrics
+#data_science.active_modelling_pipeline.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics_active.json
+#  layer: models
+#
+#data_science.candidate_modelling_pipeline.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics_candidate.json
+#  layer: models
+
+#
 data_science.active_modelling_pipeline.metrics:
-  type: tracking.MetricsDataSet
-  filepath: data/09_tracking/metrics_active.json
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
   layer: models
 
 data_science.candidate_modelling_pipeline.metrics:
-  type: tracking.MetricsDataSet
-  filepath: data/09_tracking/metrics_candidate.json
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
   layer: models
-
-data_processing.companies_columns:
-  type: tracking.JSONDataSet
-  filepath: data/09_tracking/companies_columns.json
-  layer: raw
 
