@@ -17,14 +17,14 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=split_data,
-                inputs=["model_input_table", "params:model_options"],
+                inputs=["model_input_table", "params:dataset_options"],
                 outputs=["X_train", "X_test", "y_train", "y_test"],
                 name="split_data_node",
                 tags=["training"]
             ),
             node(
                 func=train_model,
-                inputs=["X_train", "y_train"],
+                inputs=["X_train", "y_train", "params:model_parameters"],
                 outputs=["regressor_artifact", "regressor_model"],
                 name="train_model_node",
                 tags=["training"]
