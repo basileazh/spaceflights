@@ -3,6 +3,14 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
+
+#########################################
+#########################################
+          ### ETL + ML APP ###
+#########################################
+#########################################
+
+
 ##### ----- RAW ----- #####
 
 companies:
@@ -117,13 +125,6 @@ data_science.regressor_model:
               - "kedro==0.18.3"
   layer: models
 
-data_science.pipeline_inference_model:
-  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
-  flavor: mlflow.pyfunc
-  pyfunc_workflow: python_model
-  artifact_path: spaceflights  # the name of your mlflow folder = the model_name in pipeline_ml_factory
-  run_id: cc90b8f4f6574fe8824f61c18e9c1b9a
-
 # Metrics
 data_science.metrics:
   type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
@@ -143,3 +144,33 @@ data_science.test_prediction:
     type: pandas.ParquetDataSet
     filepath: data/07_model_output/prediction.pq
   layer: models
+
+#########################################
+#########################################
+          ### USER APP ###
+#########################################
+#########################################
+
+dataset_predition:
+  type: pandas.ParquetDataSet
+  filepath: data/05_model_input/X_test.pq
+  layer: model_input
+
+prediction:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/07_model_output/prediction.pq
+  layer: user_app
+
+#pipeline_inference_model:
+#  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+#  flavor: mlflow.pyfunc
+#  pyfunc_workflow: python_model
+#  artifact_path: spaceflights  # the name of your mlflow folder = the model_name in pipeline_ml_factory
+#  run_id: ea4dba4b9a904b09a56913a68058efac
+
+#prediction:
+#  type: pandas.ParquetDataSet
+#  filepath: data/07_model_output/prediction.pq
+#  layer: primary
