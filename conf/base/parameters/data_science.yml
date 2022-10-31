@@ -5,8 +5,8 @@
 # Link: https://kedro.readthedocs.io/en/0.18.2/kedro_project_setup/configuration.html#parameters
 
 data_science:
-  model_options:
-    test_size: 0.2
+  dataset_options:
+    test_size: 0.50
     random_state: 3
     features:
       - engines
@@ -17,3 +17,28 @@ data_science:
       - iata_approved
       - company_rating
       - review_scores_rating
+
+  model_parameters:
+    pipeline:
+      - GaussianProcessRegressor
+      - SGDRegressor
+      - KNeighborsRegressor
+      - QuantileRegressor
+      - ElasticNet
+      - SVR
+      - DecisionTreeRegressor
+      - MLPRegressor
+
+    model:
+      random_state: 42
+      verbose: True
+
+    kfold:
+      n_splits: 10
+      random_state: 42
+      shuffle: True
+
+    cross_val_score:
+      X: x_train
+      y: y_train
+      cv: 5
