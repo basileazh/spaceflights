@@ -8,6 +8,7 @@ from kedro_mlflow.pipeline.pipeline_ml_factory import pipeline_ml_factory
 from kedro_tutorial import __version__ as PROJECT_VERSION
 from kedro_tutorial.pipelines import data_processing as dp
 from kedro_tutorial.pipelines import data_science as ds
+from kedro_tutorial.pipelines import user_app as ua
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
@@ -39,10 +40,13 @@ def register_pipelines() -> Dict[str, Pipeline]:
         ),
     )
 
+    user_app_pipeline = ua.create_pipeline()
+
     return {
         "__default__": data_processing_pipeline + training_pipeline,
         "dp": data_processing_pipeline,
         "training": training_pipeline,
         "inference": inference_pipeline,
         "evaluation": evaluation_pipeline,
+        "user_app": user_app_pipeline,
     }

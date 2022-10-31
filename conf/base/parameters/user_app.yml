@@ -3,3 +3,6 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://kedro.readthedocs.io/en/0.18.3/kedro_project_setup/configuration.html#parameters
+
+mlflow_inference:
+  run_id: ea4dba4b9a904b09a56913a68058efac
