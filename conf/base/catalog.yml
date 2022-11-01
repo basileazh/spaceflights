@@ -3,6 +3,16 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
+
+#########################################
+#########################################
+          ### ETL + ML APP ###
+#########################################
+#########################################
+
+
+##### ----- RAW ----- #####
+
 companies:
   type: pandas.CSVDataSet
   filepath: data/01_raw/companies.csv
@@ -18,46 +28,149 @@ shuttles:
   filepath: data/01_raw/shuttles.xlsx
   layer: raw
 
-data_science.preprocessed_companies:
-  type: pandas.CSVDataSet
-  filepath: data/02_intermediate/preprocessed_companies.csv
-  layer: intermediate
-
-data_science.preprocessed_shuttles:
-  type: pandas.CSVDataSet
-  filepath: data/02_intermediate/preprocessed_shuttles.csv
-  layer: intermediate
-
-shuttle_passenger_capacity_plot:
-  type: plotly.JSONDataSet
-  filepath: data/08_reporting/shuttle_passenger_capacity_plot.json
-
-model_input_table:
-  type: pandas.CSVDataSet
-  filepath: data/03_primary/model_input_table.csv
-  layer: primary
-
-data_science.active_modelling_pipeline.regressor:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/regressor_active.pickle
-  versioned: true
-  layer: models
-
-data_science.candidate_modelling_pipeline.regressor:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/regressor_candidate.pickle
-  versioned: true
-  layer: models
-
-data_science.active_modelling_pipeline.metrics:
-  type: tracking.MetricsDataSet
-  filepath: data/09_tracking/metrics_active.json
-
-data_science.candidate_modelling_pipeline.metrics:
-  type: tracking.MetricsDataSet
-  filepath: data/09_tracking/metrics_candidate.json
-
 data_processing.companies_columns:
   type: tracking.JSONDataSet
   filepath: data/09_tracking/companies_columns.json
+  layer: raw
 
+
+##### ----- 02 INTERMEDIATE ----- #####
+
+data_processing.preprocessed_companies:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocessed_companies.pq
+  layer: intermediate
+
+data_processing.preprocessed_shuttles:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/preprocessed_shuttles.pq
+  layer: intermediate
+
+data_processing.shuttle_passenger_capacity_plot:
+  type: plotly.PlotlyDataSet
+  filepath: data/08_reporting/shuttle_passenger_capacity_plot.json
+  plotly_args:
+    type: bar
+    fig:
+      x: shuttle_type
+      y: passenger_capacity
+      orientation: v
+    layout:
+      xaxis_title: Shuttles
+      yaxis_title: Average passenger capacity
+      title: Shuttle Passenger capacity
+
+
+##### -----  03 PRIMARY ----- #####
+
+
+model_input_table:
+  type: pandas.ParquetDataSet
+  filepath: data/03_primary/model_input_table.pq
+  layer: primary
+
+
+
+##### ----- 05 MODEL INPUT -----#####
+
+# X_train
+data_science.X_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/X_train.pq
+  layer: model_input
+
+# X_test
+data_science.X_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/X_test.pq
+  layer: model_input
+
+# y_train
+data_science.y_train:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/y_train.pq
+  layer: model_input
+
+# y_test
+data_science.y_test:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/05_model_input/y_test.pq
+  layer: model_input
+
+##### ----- 06 MODELS -----#####
+
+# Regressors
+data_science.regressor_artifact:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/regressor.pickle
+  layer: models
+
+data_science.regressor_model:
+  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+  flavor: mlflow.sklearn
+  save_args:
+      conda_env:
+          python: "3.9"
+          dependencies:
+              - "kedro==0.18.3"
+  layer: models
+
+# Metrics
+data_science.metrics:
+  type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+  layer: models
+
+#data_science.metrics_json:
+#  type: tracking.MetricsDataSet
+#  filepath: data/09_tracking/metrics.json
+#  layer: models
+
+
+##### ----- 06 MODEL OUTPUTS ----- #####
+
+data_science.test_prediction:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/07_model_output/prediction.pq
+  layer: models
+
+#########################################
+#########################################
+          ### USER APP ###
+#########################################
+#########################################
+
+dataset_predition:
+  type: pandas.ParquetDataSet
+  filepath: data/05_model_input/X_test.pq
+  layer: model_input
+
+prediction:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.ParquetDataSet
+    filepath: data/07_model_output/prediction.pq
+  layer: user_app
+
+#pipeline_inference_model:
+#  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+#  flavor: mlflow.pyfunc
+#  pyfunc_workflow: python_model
+#  artifact_path: spaceflights  # the name of your mlflow folder = the model_name in pipeline_ml_factory
+#  run_id: ea4dba4b9a904b09a56913a68058efac
+
+#prediction:
+#  type: pandas.ParquetDataSet
+#  filepath: data/07_model_output/prediction.pq
+#  layer: primary

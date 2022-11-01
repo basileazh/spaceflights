@@ -21,7 +21,12 @@ ruamel-yaml
 # Data Science
 pandas
 scikit-learn
+kedro-mlflow
 
 # Visualization
 plotly
 kedro-viz
+
+# API
+# fastapi[all]
+
