@@ -43,7 +43,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     user_app_pipeline = ua.create_pipeline()
 
     return {
-        "__default__": data_processing_pipeline + training_pipeline,
+        "__default__": user_app_pipeline,
         "dp": data_processing_pipeline,
         "training": training_pipeline,
         "inference": inference_pipeline,
