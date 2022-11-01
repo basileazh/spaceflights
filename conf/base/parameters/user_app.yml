@@ -5,4 +5,6 @@
 # Link: https://kedro.readthedocs.io/en/0.18.3/kedro_project_setup/configuration.html#parameters
 
 mlflow_inference:
-  run_id: ea4dba4b9a904b09a56913a68058efac
+#  run_id: 438c2048d62244baab030df532260f56
+   model_name: spaceflight_gbr
+   stage: Staging
