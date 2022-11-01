@@ -28,5 +28,5 @@ plotly
 kedro-viz
 
 # API
-# fastapi[all]
+kedro-fast-api
 
